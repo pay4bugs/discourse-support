@@ -1,0 +1,35 @@
+@import "bootstrap";
+
+.support {
+  .category {
+    @include make-sm-column(6);
+    @include make-lg-column(4);
+    
+    ul {
+      @extend .list-unstyled;
+    }
+  
+    li {
+      padding: 5px 0;
+    }
+  }
+  
+  .search-container {
+    @include make-sm-column-offset(3);
+    @include make-sm-column(6);
+    padding-top: 35px;
+  }
+
+  input.search {
+    @extend .form-control;
+    @extend .input-lg;
+  }
+
+  footer.container {
+    margin: 40px auto 25px;
+    padding: 25px 0 0 !important;
+    border-top: 1px solid #DEDEDE;
+    color: #969999;
+  }
+  
+}

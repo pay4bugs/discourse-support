@@ -1,0 +1,11 @@
+<% content_for (:title) do %>
+<%= @topic.title %>
+<% end %>
+
+<div class="question">
+    <h2><%= link_to @topic.title, permalink(@topic) %></a></h2>
+	<div class="body">
+      <%= @post.cooked.html_safe %>
+  </div>
+  <%= link_to "Join the discussion about this...", @topic.url %>
+</div>

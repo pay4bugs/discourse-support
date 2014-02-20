@@ -1,0 +1,37 @@
+<% content_for (:title) do %>Support<% end %>
+
+<div class="row">
+      <% unless @categories.nil? %>
+        <% for category in @categories %>
+        
+          <% if category.topics.visible.has_metadata.length > 0 %>
+        
+            <div class="category">
+            
+              <h2><%= category.name %></h2>
+              
+              <ul>
+              
+              <% for topic in category.topics.visible.has_metadata %>
+              
+                <li><%= link_to topic.title, permalink(topic) %></li>
+              
+              <% end %>
+              
+              </ul>
+            </div><!--/category-->
+          
+          <% else %>
+            
+            <div class="alert alert-danger">Attention admin: You need to create subcategories under the category "<%= Category.where(slug: SiteSetting.support_parent_category_slug).first.name %>" and publish some (visible) support topics!</div>
+            
+          <% end %>
+        <% end %>
+      <% end %>
+      
+      <% if @categories.nil? %>
+        <div class="alert alert-danger">Attention admin: You need to create the category with slug "<%= SiteSetting.support_parent_category_slug %>", create some subcategories and support topics!</div>
+      <% end %>
+      
+ 
+</div>

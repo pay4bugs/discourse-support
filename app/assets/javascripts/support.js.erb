@@ -1,0 +1,103 @@
+//= require jquery_include
+//= require bootstrap-dropdown.js
+//= require bootstrap-typeahead.js
+
+(function() {
+var discourseBaseUrl = "<%= Discourse.base_url %>";
+$('input[type=text].typeahead').typeahead({
+    valueField: "url",
+    onSelect: function(item) {
+        if (typeof item.value == "undefined") {
+          window.location = discourseBaseUrl + "/contact";
+        } else {
+          window.location = discourseBaseUrl + item.value;
+        }
+    },
+    render: function(data) {
+            console.log(JSON.stringify(data));
+            var topicResults = [];
+            var userResults = [];
+            var categoryResults = [];
+            
+            $.each(data,function(index,resultType) {
+              
+              switch(resultType.type) {
+              case "topic":
+                console.log("topic");
+                topicResults = resultType.results;
+              break;
+              
+              case "user":
+                console.log("user");
+                
+                // disabled - we don't want to show user results
+                //userResults = resultType.results;
+              break;
+              
+              case "category":
+                console.log("category");
+                categoryResults = resultType.results;
+                break;
+            }
+            });
+            
+            
+            
+            
+            var that = this, display, isString = typeof that.options.displayField === 'string';
+
+            function mapItems(items,isCategory) {
+              result = $(items).map(function(i, item) {
+                    display = isString ? item[that.options.displayField] : that.options.displayField(item);
+                    var value = item[that.options.valueField];
+                    if(isCategory == true) {
+                      var parts = value.split("/category");
+                      value = '/category/<%= SiteSetting.support_parent_category_slug %>' + parts[1];
+                    }
+                    i = $(that.options.item).attr('data-value', value);
+             
+                i.find('a').html(that.highlighter(display));
+                return i[0];
+            });
+            return result;
+            }
+            
+            categoryItems = mapItems(categoryResults,true);
+            topicItems = mapItems(topicResults,false);
+
+            if(topicItems.length > 0) { 
+              topicItems.first().addClass('active');
+            } else  {
+              categoryItems.first().addClass('active')
+            }
+            
+            
+            
+            if (categoryItems.length == 0 && topicItems.length == 0) {
+              this.$menu.html('<li><a href="">Nothing found! Contact us if you need help!</a></li>');
+            } else {
+              if( topicItems.length > 0) {
+                topicItems = $.merge($("<li role='presentation' class='dropdown-header'>Topics</li>"),topicItems);
+              }
+              if( categoryItems.length > 0) {
+                categoryItems = $.merge($("<li role='presentation' class='dropdown-header'>Categories</li>"),categoryItems);
+              }
+              this.$menu.html('').append(topicItems).append(categoryItems);
+            }
+            return this;
+        },
+    ajax: { 
+    url: "<%= Discourse.base_url %>/search.json",
+    preDispatch: function(query) { return { term: query }; },
+    displayField: "title",
+    
+    preProcess: function(data) {
+      // When discourse has no results it return null instead of
+    // an empty array. We need an empty array.
+    // If a context is specified and there are no results
+    // it returns an empty array.
+    return (typeof data != "undefined" && data != null && data.length > 0) ? data : [];
+    }
+  }
+});
+})();

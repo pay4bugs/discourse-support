@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" class="support">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= yield :title  %></title>
+    
+    <%= stylesheet_link_tag 'support' %>
+
+    <%= raw SiteContent.content_for(:head) %>
+
+    <%= render_google_universal_analytics_code %>
+
+  </head>
+  <body>
+    <%- unless customization_disabled? %>
+      <%= SiteCustomization.custom_header(session[:preview_style]) %>
+    <%- end %>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Pay4Bugs</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+    <div class="container">
+
+      <div class="jumbotron">
+          <div class="row">
+            <div class="search-container">
+              <input type="text" class="typeahead search" placeholder="Search for a question, answer or topic">
+            </div>
+          </div>
+        </div>
+    <%= yield %>
+    </div>
+    <% unless !SiteContent.content_for(:support_footer).blank? %>
+    <footer class="container">
+      <%= link_to "About", company_link("www.","/about") %> - <%= link_to "Blog", company_link("blog.","/") %> - <%= link_to "Contact", company_link(nil,"/contact") %> <span class="pull-right">Copyright © <%= Time.now.strftime("%Y") %> <%= SiteSetting.company_full_name %></span>
+    </footer>
+    <% end %>
+    <%= raw SiteContent.content_for(:support_footer) %>
+    <%= javascript_include_tag 'support' %>
+  </body>
+</html>
+
+

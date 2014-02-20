@@ -1,0 +1,7 @@
+support:
+  support_host:
+    default: "support.discourse.dev"
+    client: true
+  support_parent_category_slug:
+    default: "knowledge-base-questions"
+    client: true

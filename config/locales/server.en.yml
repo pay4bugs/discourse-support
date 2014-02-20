@@ -1,0 +1,12 @@
+en:
+  admin:
+    site_settings:
+      categories:
+        support: "Support"
+  site_settings:
+    support_parent_category_slug: "Set parent category of support questions by entering its slug"
+    support_host: "Full host name of the support site. (eg. support.pay4bugs.com) Requires server restart."
+  content_types:
+    support_footer:
+      title: "Support footer"
+      description: "HTML to appear at immediately before closing body tag on support site"
